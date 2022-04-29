@@ -1,0 +1,56 @@
+---
+title: "How does popularity, number of authors, and number of tests relate?"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r, results='hide'}
+devtools::install_local(".", force = TRUE, upgrade = "never")
+library(pkgsearchsandbox)
+library(pkgsearch)
+library(ggplot2)
+```
+
+# What do we think is going on with popularity, number of authors, and number of tests?
+
+In our discussions, we though that more popular packages likely have more authors and also more tests. It would be interesting to see if this holds in the R universe.
+
+# Number of Authors and popularity
+
+The package {pkgsearch} allows you to obtain metadata about packages on CRAN. We can use this to look at how number of authors and popularity relates.
+
+To test this out, we'll first start by querying for 100 packages that relate to ecolgy:
+
+```{r}
+df <- pkgsearch::advanced_search("ecology", size = 200)
+df
+
+```
+
+Number of Authors can be counted from Author tags within the metadata.
+
+```{r}
+df <- pkgsearchsandbox::count_authors(df)
+```
+
+For popularity, there are many ways that this could be indexed. The simplest way given the {pkgsearch} results is looking at last months downloads. 
+
+Now, we will plot number of downloads last month vs number of authors, with a smoother.
+
+```{r}
+ggplot(df, aes(x = author_count, y = downloads_last_month))+
+  geom_point()+
+  geom_smooth()+
+  theme_classic()
+```
+
+# TODO: learn more about tests
+
+It would be great to learn things about how many tests are done for the packages. Maybe there is some information in the metadata. If not, could maybe look for this info by looking on github; either in the CRAN mirror, or maybe more appropriately the github repo. This would allows us to look at if testthat is being used; How many tests there are; If codecov is being used and what the code cov is; If any github actions are being used. Perhaps this would give us some idea for ecology packages.
+
+# TODO: Is there a better search term besides ecology?
+
+Other topics: statistics (maybe too broad), marine, population dynamics (too narrow?)? 
+
+We could also consider trying to take a random subset of R packages from CRAN (not sure how to do this with pkgsearch, though) and looking at stats to just get a general idea of what the trend is with R packages.
