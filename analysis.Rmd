@@ -49,8 +49,20 @@ ggplot(df, aes(x = author_count, y = downloads_last_month))+
 
 It would be great to learn things about how many tests are done for the packages. Maybe there is some information in the metadata. If not, could maybe look for this info by looking on github; either in the CRAN mirror, or maybe more appropriately the github repo. This would allows us to look at if testthat is being used; How many tests there are; If codecov is being used and what the code cov is; If any github actions are being used. Perhaps this would give us some idea for ecology packages.
 
+## Hypotheses
+
+Expect more tests, more automation, and higher coverage for packages that have more downloads.
+
+## Some pseudocode to do this
+
+1. Take a subset of packages.
+2. Filter these pkgs for just the ones with github links.
+3. See which of these pkgs are using testthat and which are using an R cmd check github action.
+4. Clone the repos and use {covr} to get overall code coverage (will have to figure out if there is a way to make this more efficient or if it could be run remotely). Save the overall code coverage.
+5. Look at and analyze results.
+
 # TODO: Is there a better search term besides ecology?
 
 Other topics: statistics (maybe too broad), marine, population dynamics (too narrow?)? 
 
-We could also consider trying to take a random subset of R packages from CRAN (not sure how to do this with pkgsearch, though) and looking at stats to just get a general idea of what the trend is with R packages.
+We could also consider trying to take a random subset of R packages from CRAN (not sure how to do this with pkgsearch, though) and looking at stats to just get a general idea of what the trend is with R packages more generally. There may be a way to do this through the [metacran](https://www.r-pkg.org/). Basically, just need a list of all cran pkg names, take a random subset of a certain size or percentage, query to find count of authors and number of downloads.
