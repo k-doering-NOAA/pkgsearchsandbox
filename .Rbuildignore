@@ -3,3 +3,4 @@
 ^\.github$
 ^docs$
 ^analysis.Rmd$
+^LICENSE\.md$
