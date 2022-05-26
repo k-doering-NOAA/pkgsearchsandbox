@@ -10,6 +10,8 @@ devtools::install_local(".", force = TRUE, upgrade = "never")
 library(pkgsearchsandbox)
 library(pkgsearch)
 library(ggplot2)
+devtools::install_github("rsquaredacademy/pkginfo")
+library(pkginfo)
 ```
 
 # What do we think is going on with popularity, number of authors, and number of tests?
@@ -53,13 +55,37 @@ It would be great to learn things about how many tests are done for the packages
 
 Expect more tests, more automation, and higher coverage for packages that have more downloads.
 
-## Some pseudocode to do this
+## Code coverage
+Here, we use get_code_coverage() from the pkginfo package to get code coverage values for individual packages. We are able to get code coverage values for 32 packages. However, the packages that do not have a code coverage value may have tests in the repositories. Now, we will plot code coverage as a function of number of authors, number of downloads last month, and date, respectively. 
 
-1. Take a subset of packages.
-2. Filter these pkgs for just the ones with github links.
-3. See which of these pkgs are using testthat and which are using an R cmd check github action.
-4. Clone the repos and use {covr} to get overall code coverage (will have to figure out if there is a way to make this more efficient or if it could be run remotely). Save the overall code coverage.
-5. Look at and analyze results.
+```{r echo=FALSE, message=FALSE, warning=FALSE, }
+df$code_cov <- NA
+for (i in 1:nrow(df)) {
+  tryCatch(
+    {
+      df$code_cov[i] <- as.numeric(pkginfo::get_code_coverage(df$package[i]))
+    },
+    error = function(e) {}
+  )
+}
+
+subdf <- subset(df, !is.na(code_cov))
+ggplot(subdf, aes(x = author_count, y = code_cov)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_classic()
+
+ggplot(subdf, aes(x = downloads_last_month, y = code_cov)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_classic()
+
+ggplot(subdf, aes(x = date, y = code_cov)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_classic()
+
+```
 
 # TODO: Is there a better search term besides ecology?
 
