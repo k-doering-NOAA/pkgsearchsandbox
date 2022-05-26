@@ -13,10 +13,8 @@ Imports:
   dplyr,
   ggplot2,
   pkgsearch,
-  stringr,
-  pkginfo
-Suggests: 
+  stringr
+  Suggests: 
     testthat (>= 3.0.0)
-Remotes: github::rsquaredacademy/pkginfo@main
 Config/testthat/edition: 3
 

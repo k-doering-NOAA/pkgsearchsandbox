@@ -10,6 +10,7 @@ devtools::install_local(".", force = TRUE, upgrade = "never")
 library(pkgsearchsandbox)
 library(pkgsearch)
 library(ggplot2)
+devtools::install_github("rsquaredacademy/pkginfo")
 library(pkginfo)
 ```
 
