@@ -10,7 +10,6 @@ devtools::install_local(".", force = TRUE, upgrade = "never")
 library(pkgsearchsandbox)
 library(pkgsearch)
 library(ggplot2)
-devtools::install_github("rsquaredacademy/pkginfo")
 library(pkginfo)
 ```
 
@@ -22,7 +21,7 @@ In our discussions, we though that more popular packages likely have more author
 
 The package {pkgsearch} allows you to obtain metadata about packages on CRAN. We can use this to look at how number of authors and popularity relates.
 
-To test this out, we'll first start by querying for 100 packages that relate to ecolgy:
+To test this out, we'll first start by querying for 100 packages that relate to ecology:
 
 ```{r}
 df <- pkgsearch::advanced_search("ecology", size = 200)
@@ -58,7 +57,7 @@ Expect more tests, more automation, and higher coverage for packages that have m
 ## Code coverage
 Here, we use get_code_coverage() from the pkginfo package to get code coverage values for individual packages. We are able to get code coverage values for 32 packages. However, the packages that do not have a code coverage value may have tests in the repositories. Now, we will plot code coverage as a function of number of authors, number of downloads last month, and date, respectively. 
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, }
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 df$code_cov <- NA
 for (i in 1:nrow(df)) {
   tryCatch(
@@ -87,8 +86,21 @@ ggplot(subdf, aes(x = date, y = code_cov)) +
 
 ```
 
+Histogram of code coverage:
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggplot(subdf, aes(x = code_cov)) +
+  geom_histogram() +
+  theme_classic()
+```
+
+It looks like code coverage is all over the place, at least for this subset of packages.
+
+
 # TODO: Is there a better search term besides ecology?
 
 Other topics: statistics (maybe too broad), marine, population dynamics (too narrow?)? 
 
 We could also consider trying to take a random subset of R packages from CRAN (not sure how to do this with pkgsearch, though) and looking at stats to just get a general idea of what the trend is with R packages more generally. There may be a way to do this through the [metacran](https://www.r-pkg.org/). Basically, just need a list of all cran pkg names, take a random subset of a certain size or percentage, query to find count of authors and number of downloads.
+
+The function `tools::CRAN_package_db()` may be helpful for selecting a random sample without needing to specify a search tearm. The authors are listed, but may need to come up with a creative way to look at things like popularity. In addition, may need to filter by github URL first (maybe either using the BugReports link in or URL).
