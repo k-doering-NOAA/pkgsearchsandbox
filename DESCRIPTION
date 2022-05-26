@@ -17,5 +17,6 @@ Imports:
   pkginfo
 Suggests: 
     testthat (>= 3.0.0)
+Remotes: github::rsquaredacademy/pkginfo@main
 Config/testthat/edition: 3
-Remotes: rsquaredacademy/pkginfo@main
+
